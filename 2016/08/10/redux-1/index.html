@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Redux - rest middleware | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Redux 是一个状态管理器，常用作 React 的状态管理。React 结合使用 Redux 非常棒，没有了解过 Redux 的同学，可以戳官网了解一下。今天笔者分享一款自己写的 Redux 中间件， 它被用来处理所有的 rest 接口请求，统一管理 ajax 状态和返回的数据。闲话不多讲，项目地址：https://github.com/HelloYie/redux-rest-middlewar">
+<meta name="keywords" content="Redux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redux - rest middleware">
+<meta property="og:url" content="http://yoursite.com/2016/08/10/redux-1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Redux 是一个状态管理器，常用作 React 的状态管理。React 结合使用 Redux 非常棒，没有了解过 Redux 的同学，可以戳官网了解一下。今天笔者分享一款自己写的 Redux 中间件， 它被用来处理所有的 rest 接口请求，统一管理 ajax 状态和返回的数据。闲话不多讲，项目地址：https://github.com/HelloYie/redux-rest-middlewar">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://oizedrxbs.bkt.clouddn.com/redux-devtool-1.png">
+<meta property="og:image" content="http://oizedrxbs.bkt.clouddn.com/redux-devtool-2.png">
+<meta property="og:image" content="https://camo.githubusercontent.com/a0d66cf145fe35cbe5fb341494b04f277d5d85dd/687474703a2f2f692e696d6775722e636f6d2f4a34476557304d2e676966">
+<meta property="og:updated_time" content="2019-03-07T16:30:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redux - rest middleware">
+<meta name="twitter:description" content="Redux 是一个状态管理器，常用作 React 的状态管理。React 结合使用 Redux 非常棒，没有了解过 Redux 的同学，可以戳官网了解一下。今天笔者分享一款自己写的 Redux 中间件， 它被用来处理所有的 rest 接口请求，统一管理 ajax 状态和返回的数据。闲话不多讲，项目地址：https://github.com/HelloYie/redux-rest-middlewar">
+<meta name="twitter:image" content="http://oizedrxbs.bkt.clouddn.com/redux-devtool-1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-redux-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/10/redux-1/" class="article-date">
+  <time datetime="2016-08-10T06:19:17.000Z" itemprop="datePublished">2016-08-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/FrontEnd/">FrontEnd</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Redux - rest middleware
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://github.com/reactjs/redux" target="_blank" rel="noopener">Redux</a> 是一个状态管理器，常用作 React 的状态管理。<br>React 结合使用 Redux 非常棒，没有了解过 Redux 的同学，可以戳官网了解一下。<br>今天笔者分享一款自己写的 Redux 中间件， 它被用来处理所有的 rest 接口请求，统一管理 ajax 状态和返回的数据。<br>闲话不多讲，项目地址：<a href="https://github.com/HelloYie/redux-rest-middleware" target="_blank" rel="noopener">https://github.com/HelloYie/redux-rest-middleware</a></p>
+<a id="more"></a>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>近期公司有一个内部项目，是一个复杂的管理系统。按照国际惯例，分析完需求就得分析分析技术选型。讨论后决定 web 前端端采用 React + Redux + Webpack + Babel 的模式。<br>后端采用 Django restframework。前后端分离解耦，采用 rest 规范对接接口。同时后端也可以很方便的给 Android\IOS 开发的同学提供接口。感觉还行！</p>
+<h2 id="redux-rest-middleware"><a href="#redux-rest-middleware" class="headerlink" title="redux-rest-middleware"></a>redux-rest-middleware</h2><p>由于采用 rest 规范，通过浏览器自带的 <a href="https://github.com/matthew-andrews/isomorphic-fetch" target="_blank" rel="noopener">fetch</a> 请求接口。<br>请求被分为了 <code>GET</code> <code>POST</code> <code>PUT</code> <code>PATCH</code> <code>DELETE</code>。这里简单介绍一下这几个 method 的使用场景。</p>
+<ul>
+<li><code>GET</code> 读取数据，不作更新，是安全的。如：<code>/api/order/list</code> <code>/api/order/1</code> 等。</li>
+<li><code>POST</code> 新增一条数据，往插入一条新数据。</li>
+<li><code>PUT</code>  更新整条记录。如原始记录是 <code>{ id: 1, name: &#39;张三&#39;, age: 11 }</code>, 做更新时 <code>/api/order/1</code> <code>{name: &#39;李四&#39;, age: 11 }</code>，需要把整条记录发给接口。</li>
+<li><code>PATCH</code> 更新记录的部分信息，如更新 <code>{ name: &#39;李四&#39; }</code>，只需要传需要更新的信息，我比较常用。</li>
+<li><code>DELETE</code> 从数据库删除一条记录。</li>
+</ul>
+<p>虽然请求各有不同，但是每个请求都会经历 [发起请求 <code>pending</code>] ==&gt; [ 请求成功 <code>success</code>, 返回数据和200] 或者 [请求失败 <code>error</code>, 返回错误状态码]，<br>基于这点，我们可以给我们的 redux 加一个 middleware 来统一处理 http 请求，具体思路如下：</p>
+<ul>
+<li><code>Q_PENDING</code>: 请求开始时为 <code>state.api.XXXModule</code> 置一个 <code>{ isFetching: true }</code> 的状态。</li>
+<li><code>Q_SUCCESS</code>: 请求成功后为 <code>state.api.XXXModule</code> 置一个 <code>{ isFetching: false, response: XXX }</code> 的状态。</li>
+<li><code>Q_ERROR</code>: 请求失败（请求超时、400、401、403、404、500）为 <code>state.api.XXXModule</code> 置一个 <code>{ isFetching: False, response: errorFromServer }</code> 的状态,<br>捕获到接口返回的错误代码和信息，做相应操作。</li>
+</ul>
+<h2 id="redux-devtool-截图"><a href="#redux-devtool-截图" class="headerlink" title="redux-devtool 截图"></a>redux-devtool 截图</h2><ul>
+<li><code>Q_SUCCESS</code></li>
+</ul>
+<p><img src="http://oizedrxbs.bkt.clouddn.com/redux-devtool-1.png" alt="redux-devtool-1"></p>
+<ul>
+<li><code>Q_ERROR</code></li>
+</ul>
+<p><img src="http://oizedrxbs.bkt.clouddn.com/redux-devtool-2.png" alt="redux-devtool-2"></p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">import cookie from &apos;js-cookie&apos;;</span><br><span class="line">import &#123; replace &#125; from &apos;react-router-redux&apos;;</span><br><span class="line">import &#123; sAlert &#125; from &apos;utils/sAlert&apos;;</span><br><span class="line">import &#123;</span><br><span class="line">  Q_PENDING,</span><br><span class="line">  Q_SUCCESS,</span><br><span class="line">  Q_ERROR,</span><br><span class="line">  LOGOUT,</span><br><span class="line">  LOADING_BAR,</span><br><span class="line">&#125; from &apos;./constants&apos;;</span><br><span class="line"></span><br><span class="line">export default function inspectorMiddleWare(&#123; dispatch, getState &#125;) &#123;</span><br><span class="line">  return next =&gt; action =&gt; &#123;</span><br><span class="line">    const &#123; module, promise, payload, onSuccess, onError &#125; = action;</span><br><span class="line">    if (!promise) &#123;</span><br><span class="line">      return next(action);</span><br><span class="line">    &#125;</span><br><span class="line">    next(&#123;</span><br><span class="line">      ...payload,</span><br><span class="line">      type: Q_PENDING,</span><br><span class="line">      module,</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    next(&#123;</span><br><span class="line">      type: LOADING_BAR,</span><br><span class="line">      loadingBarPercent: 0,</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    const checkLoadingBarPercent = () =&gt; &#123;</span><br><span class="line">      const sTime = setTimeout(() =&gt; &#123;</span><br><span class="line">        let loadingBarPercent = getState().ui.loadingBarPercent;</span><br><span class="line">        loadingBarPercent += Math.floor(Math.random() * 20);</span><br><span class="line">        if (loadingBarPercent &lt; 95) &#123;</span><br><span class="line">          next(&#123;</span><br><span class="line">            type: LOADING_BAR,</span><br><span class="line">            loadingBarPercent,</span><br><span class="line">          &#125;);</span><br><span class="line">          checkLoadingBarPercent();</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">          clearTimeout(sTime);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;, 300);</span><br><span class="line">    &#125;;</span><br><span class="line">    checkLoadingBarPercent();</span><br><span class="line"></span><br><span class="line">    // 异步 action 都将返回 promise</span><br><span class="line">    return new Promise((resolve, reject) =&gt; &#123;</span><br><span class="line">      return promise()</span><br><span class="line">      // check http status</span><br><span class="line">      .then((response) =&gt; &#123;</span><br><span class="line">        if (response.status &gt;= 200 &amp;&amp; response.status &lt; 300) &#123;</span><br><span class="line">          return response;</span><br><span class="line">        &#125;</span><br><span class="line">        if (response.status === 403) &#123;</span><br><span class="line">          sAlert(&apos;您没有执行该操作的权限&apos;, &apos;error&apos;);</span><br><span class="line">        &#125;</span><br><span class="line">        if (response.status === 401) &#123;</span><br><span class="line">          const &#123; routing &#125; = getState();</span><br><span class="line">          const &#123; locationBeforeTransitions &#125; = routing;</span><br><span class="line">          dispatch(&#123;</span><br><span class="line">            type: LOGOUT,</span><br><span class="line">          &#125;);</span><br><span class="line">          cookie.remove(&apos;token&apos;);</span><br><span class="line">          dispatch(replace(`/login`));</span><br><span class="line">        &#125;</span><br><span class="line">        return response.json().then((resJson) =&gt; &#123;</span><br><span class="line">          if (reresponse: errJson,</span><br><span class="line">            module,</span><br><span class="line">          &#125;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">          throw errJson;</span><br><span class="line">        &#125;</span><br><span class="line">        next(&#123;</span><br><span class="line">          type: LOADING_BAR,</span><br><span class="line">          loadingBarPercent: 100,</span><br><span class="line">        &#125;);</span><br><span class="line">        if (onError) &#123;</span><br><span class="line">          onError(errJson, dispatch, getState);</span><br><span class="line">        &#125;</span><br><span class="line">        reject(errJson);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="在-store-里面添加-middware，如我的middleware-如下："><a href="#在-store-里面添加-middware，如我的middleware-如下：" class="headerlink" title="在 store 里面添加 middware，如我的middleware 如下："></a>在 store 里面添加 middware，如我的middleware 如下：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">import thunk from &apos;redux-thunk&apos;;</span><br><span class="line">import &#123; applyMiddleware, compose, createStore &#125; from &apos;redux&apos;;</span><br><span class="line">import &#123; routerMiddleware &#125; from &apos;react-router-redux&apos;;</span><br><span class="line">import &#123; DEBUG &#125; from &apos;config&apos;;</span><br><span class="line">import rootReducer from &apos;redux/reducers&apos;;</span><br><span class="line">import inspectorMiddleware from &apos;./middleware&apos;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">export default function configureStore(initialState = &#123;&#125;, history) &#123;</span><br><span class="line">  // Add so dispatched route actions to the history</span><br><span class="line">  const reduxRouterMiddleware = routerMiddleware(history);</span><br><span class="line"></span><br><span class="line">  const middleware = applyMiddleware(inspectorMiddleware, thunk, reduxRouterMiddleware);</span><br><span class="line"></span><br><span class="line">  const createStoreWithMiddleware = compose(</span><br><span class="line">    middleware,</span><br><span class="line">    DEBUG &amp;&amp;</span><br><span class="line">    typeof window === &apos;object&apos; &amp;&amp;</span><br><span class="line">    typeof window.devToolsExtension !== &apos;undefined&apos; ? window.devToolsExtension() : f =&gt; f</span><br><span class="line">  );</span><br><span class="line">  const store = createStoreWithMiddleware(createStore)(rootReducer, initialState);</span><br><span class="line">  return store;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里我又使用了另外一个middleware，<a href="https://github.com/gaearon/redux-devtools" target="_blank" rel="noopener">https://github.com/gaearon/redux-devtools</a>,<br>是 chrome 的 redux 调试器，个人认为是使用 redux 必须的。<br><img src="https://camo.githubusercontent.com/a0d66cf145fe35cbe5fb341494b04f277d5d85dd/687474703a2f2f692e696d6775722e636f6d2f4a34476557304d2e676966" alt="redux-devtool"></p>
+<h3 id="新增一个-reducer-来处理接口请求"><a href="#新增一个-reducer-来处理接口请求" class="headerlink" title="新增一个 reducer 来处理接口请求"></a>新增一个 reducer 来处理接口请求</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">// api.js</span><br><span class="line"></span><br><span class="line">import &#123;</span><br><span class="line">  Q_PENDING,</span><br><span class="line">  Q_SUCCESS,</span><br><span class="line">  Q_ERROR,</span><br><span class="line">&#125; from &apos;../constants&apos;;</span><br><span class="line"></span><br><span class="line">export default function reducer(state = &#123;&#125;, action) &#123;</span><br><span class="line">  const &#123; AuthVerifyPOST, NotificationGET, NotificationPATCH &#125; = state;</span><br><span class="line">  switch (action.type) &#123;</span><br><span class="line">    case Q_PENDING:</span><br><span class="line">      return &#123;</span><br><span class="line">        ...state,</span><br><span class="line">        [action.module]: &#123; isFetching: true, ...action &#125;,</span><br><span class="line">      &#125;;</span><br><span class="line">    case Q_SUCCESS:</span><br><span class="line">      return &#123;</span><br><span class="line">        ...state,</span><br><span class="line">        [action.module]: &#123;</span><br><span class="line">          isFetching: false,</span><br><span class="line">          isError: false,</span><br><span class="line">          ...action,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;;</span><br><span class="line">    case Q_ERROR:</span><br><span class="line">      return &#123;</span><br><span class="line">        ...state,</span><br><span class="line">        [action.module]: &#123;</span><br><span class="line">          isFetching: false,</span><br><span class="line">          isError: true,</span><br><span class="line">          ...action,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;;</span><br><span class="line">    default:</span><br><span class="line">      return state;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="在全局-reducer-中使用该-reducer"><a href="#在全局-reducer-中使用该-reducer" class="headerlink" title="在全局 reducer 中使用该 reducer"></a>在全局 reducer 中使用该 reducer</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import &#123; combineReducers &#125; from &apos;redux&apos;;</span><br><span class="line">import &#123; routerReducer as routing &#125; from &apos;react-router-redux&apos;;</span><br><span class="line">import &#123; reducer as form &#125; from &apos;redux-form&apos;;</span><br><span class="line">import api from &apos;./module/api&apos;;</span><br><span class="line">import auth from &apos;./module/auth&apos;;</span><br><span class="line">import ui from &apos;./module/ui&apos;;</span><br><span class="line">import upload from &apos;./module/upload&apos;;</span><br><span class="line"></span><br><span class="line">export default combineReducers(&#123;</span><br><span class="line">  ui,</span><br><span class="line">  routing,</span><br><span class="line">  form,</span><br><span class="line">  api, // 这里就是我们处理 api 的reducer 啦。</span><br><span class="line">  auth,</span><br><span class="line">  upload,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="尾声"><a href="#尾声" class="headerlink" title="尾声"></a>尾声</h2><p>好了，不知道这款 redux-rest-middleware 有没有帮到你呢。<br>如果感兴趣的话可以戳 <a href="https://github.com/HelloYie/redux-rest-middleware" target="_blank" rel="noopener">https://github.com/HelloYie/redux-rest-middleware</a> 一起来完善或者提出宝贵的意见。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/10/redux-1/" data-id="cjszk51xp0000sbq59rxep3rm" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redux/">Redux</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/08/12/tinyMCE-1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          TinyMCE - 在 tinyMCE 中使用七牛上传
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/08/09/react-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">React - 组件属性和生命周期的理解</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/FrontEnd/">FrontEnd</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/VPN/">VPN</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tunnelblick/">Tunnelblick</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css3/">css3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tinyMCE/">tinyMCE</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/React/" style="font-size: 10px;">React</a> <a href="/tags/Redux/" style="font-size: 10px;">Redux</a> <a href="/tags/Tunnelblick/" style="font-size: 10px;">Tunnelblick</a> <a href="/tags/css3/" style="font-size: 10px;">css3</a> <a href="/tags/tinyMCE/" style="font-size: 10px;">tinyMCE</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/05/10/vpn/">React - 组件属性和生命周期的理解</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/12/tinyMCE-1/">TinyMCE - 在 tinyMCE 中使用七牛上传</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/10/redux-1/">Redux - rest middleware</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/09/react-1/">React - 组件属性和生命周期的理解</a>
+          </li>
+        
+          <li>
+            <a href="/2016/07/26/build-private-npm-repository-server/">npm 私有仓库搭建</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

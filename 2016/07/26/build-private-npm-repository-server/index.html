@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>npm 私有仓库搭建 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="为什么搭建私有的 npm 仓库？私有的 npm 仓库可以发布和管理公司内部的私有的、暂不公开的 npm 包，加速 npm 包的下载，npm 官方仓库在国内太慢了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="npm 私有仓库搭建">
+<meta property="og:url" content="http://yoursite.com/2016/07/26/build-private-npm-repository-server/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="为什么搭建私有的 npm 仓库？私有的 npm 仓库可以发布和管理公司内部的私有的、暂不公开的 npm 包，加速 npm 包的下载，npm 官方仓库在国内太慢了。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://img.l.jifangcheng.com/sinopia-1.png">
+<meta property="og:updated_time" content="2019-03-07T16:30:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="npm 私有仓库搭建">
+<meta name="twitter:description" content="为什么搭建私有的 npm 仓库？私有的 npm 仓库可以发布和管理公司内部的私有的、暂不公开的 npm 包，加速 npm 包的下载，npm 官方仓库在国内太慢了。">
+<meta name="twitter:image" content="http://img.l.jifangcheng.com/sinopia-1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-build-private-npm-repository-server" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/26/build-private-npm-repository-server/" class="article-date">
+  <time datetime="2016-07-26T05:38:31.000Z" itemprop="datePublished">2016-07-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      npm 私有仓库搭建
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>为什么搭建私有的 npm 仓库？私有的 npm 仓库可以发布和管理公司内部的私有的、暂不公开的 npm 包，加速 npm 包的下载，npm 官方仓库在国内太慢了。</p>
+<a id="more"></a>
+<h2 id="了解-sinopia"><a href="#了解-sinopia" class="headerlink" title="了解 sinopia"></a>了解 sinopia</h2><p><a href="https://github.com/rlidwka/sinopia" target="_blank" rel="noopener">https://github.com/rlidwka/sinopia</a><br>sinopia 是一个用于搭建私有的 npm 仓库的软件，我们将借助它来搭建 npm 私有仓库。</p>
+<p>sinopia 安装和使用都极其简单，它还有以下的特性：</p>
+<ul>
+<li>支持安装 npm 包（npm install, npm upgrade, etc.）</li>
+<li>支持发布 npm 包（npm publish）</li>
+<li>支持 npm unpublish</li>
+<li>即将支持 npm tag</li>
+<li>不支持 npm deprecate</li>
+<li>支持 npm adduser</li>
+<li>支持在浏览器端搜索，不支持命令行搜索</li>
+<li>不支持 npm star, npm unstar，因为这对私有 npm 包没有意义</li>
+<li>sinopia 没有使用数据库来存储，它使用本地的文件系统来存储</li>
+</ul>
+<h2 id="使用-sinopia"><a href="#使用-sinopia" class="headerlink" title="使用 sinopia"></a>使用 sinopia</h2><h3 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 安装和使用</span><br><span class="line"><span class="meta">$</span> npm install -g sinopia</span><br><span class="line"><span class="meta">$</span> sinopia</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> npm 配置，使用 sinopia 搭建的 npm 仓库来下载 npm 包</span><br><span class="line"><span class="meta">$</span> npm set registry http://localhost:4873/</span><br></pre></td></tr></table></figure>
+<p>sinopia 界面<br><img src="http://img.l.jifangcheng.com/sinopia-1.png" alt="sinopia"></p>
+<p>服务器搭建完成之后，就可以使用 <code>http://localhost:4873/</code> 作为仓库地址来下载和发布 npm 包了。</p>
+<p>当你使用 <code>npm install xx</code> 后，sinopia 会检查本地有没有 xx 这个包，如果有，直接使用本地的缓存；如果没有，它会从 npm 官方仓库下载这个包，并将这个包缓存在本地以便二次下载。sinopia 并不会同步 npm 官方仓库的所有内容，它只会缓存你使用 <code>npm install</code> 下载过的内容。</p>
+<p>如果要发布私有包，使用 <code>npm publish --registry=http://localhost:4873/</code> 就可以了，发布好了你就可以在 web 端界面上看到它了。</p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>添加一个新用户：<code>npm adduser --registry http://localhost:4873/</code>，接下来输入用户名和密码就可以了，用户可以用来做权限管理</p>
+<p>配置文件详解</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 你可以在这里找到更多配置示例：</span></span><br><span class="line"><span class="comment"># https://github.com/rlidwka/sinopia/tree/master/conf</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 存储 npm 包的位置</span></span><br><span class="line"><span class="attr">storage:</span> <span class="string">./storage</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 认证</span></span><br><span class="line"><span class="comment"># max_users 设置成 -1 拒绝使用 npm adduser 添加用户，不过在公司内部我们可以使用 htpasswd 这个文件来初始化用户</span></span><br><span class="line"><span class="comment"># 具体的会在下面说到</span></span><br><span class="line"><span class="attr">auth:</span></span><br><span class="line"><span class="attr">  htpasswd:</span></span><br><span class="line"><span class="attr">    file:</span> <span class="string">./htpasswd</span></span><br><span class="line"><span class="attr">    max_users:</span> <span class="bullet">-1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置上游的 npm 服务器，主要是用于当仓库中不存在请求的那个包时去上游服务器拉取</span></span><br><span class="line"><span class="attr">uplinks:</span></span><br><span class="line"><span class="attr">  npmjs:</span></span><br><span class="line"><span class="attr">    url:</span> <span class="attr">https://registry.npmjs.org/</span></span><br><span class="line"></span><br><span class="line"><span class="attr">packages:</span></span><br><span class="line">  <span class="comment"># 正则表达式匹配包来控制相应的权限</span></span><br><span class="line">  <span class="comment"># access 表示哪一类用户可以对匹配的项目进行安装(install)</span></span><br><span class="line">  <span class="comment"># publish 表示哪一类用户可以对匹配的项目进行发布(publish)</span></span><br><span class="line">  <span class="comment"># proxy 当本地没有包的时候使用的代理，对应上面的 uplinks</span></span><br><span class="line">  <span class="comment"># 一共有以下几种权限：</span></span><br><span class="line">  <span class="comment"># $all 所有人都可以</span></span><br><span class="line">  <span class="comment"># $anonymous 只有匿名者可以进行对应操作（通常无用）</span></span><br><span class="line">  <span class="comment"># $authenticated 只有经过认证的可以进行操作（私有的一定要用这个）</span></span><br><span class="line"></span><br><span class="line">  <span class="string">'@*/*'</span><span class="string">:</span></span><br><span class="line"><span class="attr">    access:</span> <span class="string">$all</span></span><br><span class="line"><span class="attr">    publish:</span> <span class="string">$authenticated</span></span><br><span class="line"></span><br><span class="line">  <span class="string">'*'</span><span class="string">:</span></span><br><span class="line"><span class="attr">    access:</span> <span class="string">$all</span></span><br><span class="line"><span class="attr">    publish:</span> <span class="string">$authenticated</span></span><br><span class="line"><span class="attr">    proxy:</span> <span class="string">npmjs</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 日志的配置</span></span><br><span class="line"><span class="attr">logs:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">&#123;type:</span> <span class="string">stdout,</span> <span class="attr">format:</span> <span class="string">pretty,</span> <span class="attr">level:</span> <span class="string">http&#125;</span></span><br><span class="line">  <span class="comment">#- &#123;type: file, path: sinopia.log, level: info&#125;</span></span><br></pre></td></tr></table></figure>
+<p>关于 auth 的配置，为了达到私有的目的，我们把 max_users 设置成 -1 来拒绝添加用户，不过在公司内部我们依然可以使用 htpasswd 这个文件来初始化用户，其格式如下，每一行一个用户：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username:&#123;SHA&#125;经过加密的后密码值:autocreated 2016-07-25T08:55:48.859Z（创建时间）</span><br></pre></td></tr></table></figure>
+<p>加密算法：将密码使用 SHA1 算法哈希之后再使用 base64 转换再输出就可以了。<br>使用 python 实现的密码加密示例，下面是密码 <code>admin</code> 加密后的值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>base64.b64encode(hashlib.sha1(<span class="string">'admin'</span>).digest())</span><br><span class="line"><span class="string">'0DPiKuNIrrVmD8IUCuw1hQxNqZc='</span></span><br></pre></td></tr></table></figure>
+<p>配置完成后重启一下 sinopia 服务器就可以了。</p>
+<p>更多配置可以去 <a href="https://github.com/rlidwka/sinopia/blob/master/conf/full.yaml" target="_blank" rel="noopener">https://github.com/rlidwka/sinopia/blob/master/conf/full.yaml</a> 看看。</p>
+<h3 id="使用-Docker-来搭建-sinopia"><a href="#使用-Docker-来搭建-sinopia" class="headerlink" title="使用 Docker 来搭建 sinopia"></a>使用 Docker 来搭建 sinopia</h3><p>sinopia 提供了一个 Docker 的镜像 <a href="https://registry.hub.docker.com/u/keyvanfatehi/sinopia/" target="_blank" rel="noopener">https://registry.hub.docker.com/u/keyvanfatehi/sinopia/</a></p>
+<p>我们可以使用这个镜像来快速搭建一个 sinopia</p>
+<h4 id="快速开始-1"><a href="#快速开始-1" class="headerlink" title="快速开始"></a>快速开始</h4><ul>
+<li>安装镜像 <code>docker pull keyvanfatehi/sinopia:latest</code></li>
+<li>创建容器 <code>docker run --name sinopia -d -p 4873:4873 keyvanfatehi/sinopia:latest</code></li>
+<li>现在就算搭建完成了，你可以访问 <code>http://&lt;docker_host&gt;:4873/</code> 来查看效果了</li>
+</ul>
+<p>更详细的文档可以去 <a href="https://github.com/kfatehi/docker-sinopia" target="_blank" rel="noopener">https://github.com/kfatehi/docker-sinopia</a> 看看</p>
+<h4 id="使用-docker-compose"><a href="#使用-docker-compose" class="headerlink" title="使用 docker-compose"></a>使用 docker-compose</h4><p>通过配置 docker-compose 我们可以更优雅地搭建 sinopia，下面是一个示例：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">'2'</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  sinopia:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">keyvanfatehi/sinopia</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">"4873:4873"</span></span><br><span class="line">    <span class="comment"># 启动的时候执行的命令（启动 sinopia）</span></span><br><span class="line"><span class="attr">    command:</span> <span class="string">/opt/sinopia/start.sh</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 我们在宿主机和 docker 里面同步了 config.yaml 和 htpasswd 这两个文件</span></span><br><span class="line">    <span class="comment"># 并且把 docker 里面存储的 npm 包也同步到宿主机上面</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">./config.yaml:/opt/sinopia/config.yaml</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">./htpasswd:/opt/sinopia/htpasswd</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/data/storage/:/opt/sinopia/storage/</span></span><br></pre></td></tr></table></figure>
+<p>写好了 docker-compose.yml 后就可以通过 <code>docker-compose up</code> 来启动 sinopia 服务。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/07/26/build-private-npm-repository-server/" data-id="cjszk51y00007sbq5to41gx4z" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/08/09/react-1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          React - 组件属性和生命周期的理解
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/03/01/css3-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CSS3 - mobile app 适配方案小结</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/FrontEnd/">FrontEnd</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/VPN/">VPN</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tunnelblick/">Tunnelblick</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css3/">css3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tinyMCE/">tinyMCE</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/React/" style="font-size: 10px;">React</a> <a href="/tags/Redux/" style="font-size: 10px;">Redux</a> <a href="/tags/Tunnelblick/" style="font-size: 10px;">Tunnelblick</a> <a href="/tags/css3/" style="font-size: 10px;">css3</a> <a href="/tags/tinyMCE/" style="font-size: 10px;">tinyMCE</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/05/10/vpn/">React - 组件属性和生命周期的理解</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/12/tinyMCE-1/">TinyMCE - 在 tinyMCE 中使用七牛上传</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/10/redux-1/">Redux - rest middleware</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/09/react-1/">React - 组件属性和生命周期的理解</a>
+          </li>
+        
+          <li>
+            <a href="/2016/07/26/build-private-npm-repository-server/">npm 私有仓库搭建</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>CSS3 - mobile app 适配方案小结 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在我们做手机网页开发的时候，我们在关注文字大小、容器尺寸和间距、图片大小、背景图大小等时，往往需要要适配各个尺寸，各个机型。没有严格统一的解决方案，本文就各个场景如何优雅的实现适配分析分析。">
+<meta name="keywords" content="css3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS3 - mobile app 适配方案小结">
+<meta property="og:url" content="http://yoursite.com/2016/03/01/css3-1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在我们做手机网页开发的时候，我们在关注文字大小、容器尺寸和间距、图片大小、背景图大小等时，往往需要要适配各个尺寸，各个机型。没有严格统一的解决方案，本文就各个场景如何优雅的实现适配分析分析。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://7jpp2v.com1.z0.glb.clouddn.com/div.png">
+<meta property="og:image" content="http://7jpp2v.com1.z0.glb.clouddn.com/div2.png">
+<meta property="og:updated_time" content="2019-03-07T16:30:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CSS3 - mobile app 适配方案小结">
+<meta name="twitter:description" content="在我们做手机网页开发的时候，我们在关注文字大小、容器尺寸和间距、图片大小、背景图大小等时，往往需要要适配各个尺寸，各个机型。没有严格统一的解决方案，本文就各个场景如何优雅的实现适配分析分析。">
+<meta name="twitter:image" content="http://7jpp2v.com1.z0.glb.clouddn.com/div.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-css3-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/01/css3-1/" class="article-date">
+  <time datetime="2016-03-01T05:29:22.000Z" itemprop="datePublished">2016-03-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/FrontEnd/">FrontEnd</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CSS3 - mobile app 适配方案小结
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在我们做手机网页开发的时候，我们在关注文字大小、容器尺寸和间距、图片大小、背景图大小等时，往往需要要适配各个尺寸，各个机型。没有严格统一的解决方案，本文就各个场景如何优雅的实现适配分析分析。</p>
+<a id="more"></a>
+<h2 id="简单页面"><a href="#简单页面" class="headerlink" title="简单页面"></a>简单页面</h2><p>简单页面，一般直接宽度铺满整个屏幕，高度固定。在大尺寸屏幕上会有留白。<code>meta</code> 规定如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>这样宽度指定为设备的宽度，缩放比例为1:1，不能缩放。</p>
+<h2 id="稍复杂页面"><a href="#稍复杂页面" class="headerlink" title="稍复杂页面"></a>稍复杂页面</h2><p>稍复杂页面可以使用 <code>flex</code> 布局来定制宽度。</p>
+<h2 id="media-query"><a href="#media-query" class="headerlink" title="media query"></a>media query</h2><p>再复杂一些的响应式页面，需要利用css3的media query属性来进行适配，大致思路是根据屏幕不同大小，来设置对应的css样式。</p>
+<h2 id="rem-解决方案"><a href="#rem-解决方案" class="headerlink" title="rem 解决方案"></a>rem 解决方案</h2><h3 id="rem-简介"><a href="#rem-简介" class="headerlink" title="rem 简介"></a>rem 简介</h3><p>rem是（font size of the root element），意思是根据根元素(<code>&lt;html&gt;</code>)字号大小来设置子元素的大小， E9+，Firefox、Chrome、Safari、Opera ，如果我们不修改相关的字体配置，都是默认显示font-size是16px即:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">html &#123;</span><br><span class="line">  font-size:16px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么如果我们想给一个P标签设置12px的字体大小那么用rem来写就是:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p &#123;</span><br><span class="line">  font-size: 0.75rem; //12÷16=0.75（rem）</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>基本上使用rem这个单位来设置字体大小基本上是这个套路，好处是假如用户自己修改了浏览器的默认字体大小，那么使用rem时就可以根据用户的调整的大小来显示了。 但是rem不仅可以适用于字体，同样可以用于width height margin这些样式的单位。</p>
+<p>先看一个简单的例子，进行 rem 适配：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.box &#123;</span><br><span class="line">  width: 10rem;</span><br><span class="line">  height: 10rem;</span><br><span class="line">  background-color: red;</span><br><span class="line">&#125;</span><br><span class="line">&lt;div class=&quot;box&quot;&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p>效果如下：</p>
+<p><img src="http://7jpp2v.com1.z0.glb.clouddn.com/div.png" alt="img1"></p>
+<p>这是一个div，宽度和高度都用rem来设置了，在浏览器里面是这样显示的，  可以看到，在浏览器里面width和height分别是160px，正好是16px * 10,那么如果将html根元素的默认font-size修改一下呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">html &#123;</span><br><span class="line">  font-size: 17px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.box &#123;</span><br><span class="line">  width: 10rem;</span><br><span class="line">  height: 10rem;</span><br><span class="line">  background-color: red;</span><br><span class="line">&#125;</span><br><span class="line">&lt;div class=&quot;box&quot;&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p>再来看看结果：</p>
+<p><img src="http://7jpp2v.com1.z0.glb.clouddn.com/div2.png" alt="img2"></p>
+<p>这时width和height都是170px，这就说明了将rem应用与width和height时，同样适用rem的特性，根据根元素的font-size值来改变自身的值，由此我们应该可以联想到我们可以给html设定不同的值，从而达到我们css样式中的适配效果。</p>
+<h3 id="利用-sass-进行-rem-数值计算"><a href="#利用-sass-进行-rem-数值计算" class="headerlink" title="利用 sass 进行 rem 数值计算"></a>利用 sass 进行 rem 数值计算</h3><p>首先定义计算函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@function px2rem($px)&#123;</span><br><span class="line">  $rem : 37.5px;</span><br><span class="line">  @return ($px/$rem) + rem;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当我们具体使用时</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.box &#123;</span><br><span class="line">  width: px2rem(100px);</span><br><span class="line">  height: px2rem(100px);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="设定-rem-基准"><a href="#设定-rem-基准" class="headerlink" title="设定 rem 基准"></a>设定 rem 基准</h3><p>可以利用 media query 来设置，既：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@media (min-device-width : 375px) and (max-device-width : 667px) and (-webkit-min-device-pixel-ratio : 2) &#123;</span><br><span class="line">  html &#123;</span><br><span class="line">    font-size: 37.5px;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>利用javascript来动态设置 根据我们之前算出的基准值，我们可以利用js动态算出当前屏幕所适配的 font-size 即：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">document.getElementsByTagName(&apos;html&apos;)[0].style.fontSize = window.innerWidth / 10 + &apos;px&apos;;</span><br></pre></td></tr></table></figure>
+<p>这样就可以使不同尺寸的屏幕 html 使用不同的 <code>font-size</code>。</p>
+<h3 id="动态设定-meta"><a href="#动态设定-meta" class="headerlink" title="动态设定 meta"></a>动态设定 meta</h3><p>我们知道，一般我们获取到的视觉稿大部分是iphone6的，所以我们看到的尺寸一般是双倍大小的，在使用rem之前，我们一般会自觉的将标注/2，其实这也并无道理，但是当我们配合rem使用时，完全可以按照视觉稿上的尺寸来设置。</p>
+<ul>
+<li>设计给的稿子双倍的原因是iphone6这种屏幕属于高清屏，也即是设备像素比(device pixel ratio)dpr比较大，所以显示的像素较为清晰。</li>
+<li>一般手机的dpr是1，iphone4，iphone5这种高清屏是2，iphone6s plus这种高清屏是3，可以通过js的window.devicePixelRatio获取到当前设备的dpr，所以iphone6给的视觉稿大小是（*2）750×1334了。</li>
+<li>拿到了dpr之后，我们就可以在viewport meta头里，取消让浏览器自动缩放页面，而自己去设置viewport的content例如（这里之所以要设置viewport是因为我们要实现border1px的效果，加入我给border设置了1px，在scale的影响下，高清屏中就会显示成0.5px的效果）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">  var drp = window.devicePixelRatio;</span><br><span class="line">  var meta = document.querySelector(&apos;meta[name=&quot;viewport&quot;]&apos;);</span><br><span class="line">  meta.setAttribute(&apos;content&apos;, &apos;initial-scale=&apos; + 1/dpr + &apos;, maximum-scale=&apos; + 1/dpr + &apos;, minimum-scale=&apos; + 1/dpr + &apos;, user-scalable=no&apos;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>设置完之后配合rem，修改</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@function px2rem($px)&#123;</span><br><span class="line">  $rem : 75px;</span><br><span class="line">  @return ($px/$rem) + rem;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>双倍75，这样就可以完全按照视觉稿上的尺寸来了。不用在/2了，这样做的好处是：</p>
+<ul>
+<li>解决了图片高清问题。</li>
+<li>解决了 iphone6 border 1px 问题（我们设置的1px，在iphone上，由于viewport的scale是0.5，所以就自然缩放成0.5px）</li>
+</ul>
+<h2 id="尾声"><a href="#尾声" class="headerlink" title="尾声"></a>尾声</h2><p>以上4种方案都有它的适用场景，关键看业务场景，复杂页面的话，使用 <code>rem</code> 来做响应式布局是相对优雅的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/03/01/css3-1/" data-id="cjszk51xz0006sbq5pernrck8" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css3/">css3</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/07/26/build-private-npm-repository-server/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          npm 私有仓库搭建
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/11/09/use-Bcrypt/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用 Bcrypt 来加密你的用户密码</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/FrontEnd/">FrontEnd</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/VPN/">VPN</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tunnelblick/">Tunnelblick</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css3/">css3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tinyMCE/">tinyMCE</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/React/" style="font-size: 10px;">React</a> <a href="/tags/Redux/" style="font-size: 10px;">Redux</a> <a href="/tags/Tunnelblick/" style="font-size: 10px;">Tunnelblick</a> <a href="/tags/css3/" style="font-size: 10px;">css3</a> <a href="/tags/tinyMCE/" style="font-size: 10px;">tinyMCE</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/05/10/vpn/">React - 组件属性和生命周期的理解</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/12/tinyMCE-1/">TinyMCE - 在 tinyMCE 中使用七牛上传</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/10/redux-1/">Redux - rest middleware</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/09/react-1/">React - 组件属性和生命周期的理解</a>
+          </li>
+        
+          <li>
+            <a href="/2016/07/26/build-private-npm-repository-server/">npm 私有仓库搭建</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>React - 组件属性和生命周期的理解 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="React 是用于构建用户界面的 javascript 库，笔者在写这边文章时，其最新版是 v15.x。作为一款专注构建用户界面的 javascript 库，它无疑是近两年来最流行的 javascript 库。许多人使用 React 作为 MVC 架构的 V 层，它是纯前端的 javascript 库。从它出现到现在，以后使用了将近1年多，以下是我对它生命周期和属性的理解。">
+<meta name="keywords" content="React">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React - 组件属性和生命周期的理解">
+<meta property="og:url" content="http://yoursite.com/2016/08/09/react-1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="React 是用于构建用户界面的 javascript 库，笔者在写这边文章时，其最新版是 v15.x。作为一款专注构建用户界面的 javascript 库，它无疑是近两年来最流行的 javascript 库。许多人使用 React 作为 MVC 架构的 V 层，它是纯前端的 javascript 库。从它出现到现在，以后使用了将近1年多，以下是我对它生命周期和属性的理解。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-03-07T16:30:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React - 组件属性和生命周期的理解">
+<meta name="twitter:description" content="React 是用于构建用户界面的 javascript 库，笔者在写这边文章时，其最新版是 v15.x。作为一款专注构建用户界面的 javascript 库，它无疑是近两年来最流行的 javascript 库。许多人使用 React 作为 MVC 架构的 V 层，它是纯前端的 javascript 库。从它出现到现在，以后使用了将近1年多，以下是我对它生命周期和属性的理解。">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-react-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/09/react-1/" class="article-date">
+  <time datetime="2016-08-09T02:19:17.000Z" itemprop="datePublished">2016-08-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/FrontEnd/">FrontEnd</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      React - 组件属性和生命周期的理解
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://github.com/facebook/react" target="_blank" rel="noopener">React</a> 是用于构建用户界面的 javascript 库，笔者在写这边文章时，其最新版是 v15.x。<br>作为一款专注构建用户界面的 javascript 库，它无疑是近两年来最流行的 javascript 库。许多人使用 React 作为 MVC 架构的 V 层，它是纯前端的 javascript 库。<br>从它出现到现在，以后使用了将近1年多，以下是我对它生命周期和属性的理解。</p>
+<a id="more"></a>
+<h1 id="Ract-特点"><a href="#Ract-特点" class="headerlink" title="Ract 特点"></a>Ract 特点</h1><ul>
+<li><p><strong>虚拟 DOM</strong></p>
+<p>React 为了超高的性能而是用虚拟 DOM 作为其实现，让用户无感的更新 UI 和数据。</p>
+</li>
+<li><p><strong>单向数据流</strong><br>React 实现了单向数据流，采用声明式的 JSX 语法，依靠数据驱动 UI，比传统数据绑定更简单。</p>
+</li>
+</ul>
+<h1 id="几个重要的概念"><a href="#几个重要的概念" class="headerlink" title="几个重要的概念"></a>几个重要的概念</h1><h2 id="component-组件"><a href="#component-组件" class="headerlink" title="component (组件)"></a>component (组件)</h2><ul>
+<li>用 React 构建 UI 时, 页面上所有的UI控件都可以看做是一个 component，比如一个弹窗、一个侧边栏，又或者一个表单。</li>
+<li>组件可以看成是一个状态机，由 <code>state</code> 和 <code>props</code> 维持状态。</li>
+<li>组件名称首字母必须大写，如: <code>PersonBox</code> 而不是 <code>personBox</code> 或者 <code>person_box</code>。</li>
+</ul>
+<h2 id="JSX"><a href="#JSX" class="headerlink" title="JSX"></a>JSX</h2><ul>
+<li>React 中，HTML 代码与 js 代码是混合在一起写的，初学者看起来可能有些疯狂，中间看起来像 HTML 的代码就是 JSX，它很像一般的 HTML ，不过它并不是。比如它不支持<code>class=</code>，而是<code>className=</code>等。</li>
+<li><p>JSX 最终会被解析成 javascript 代码，你可以使用 <code>.js</code> 或者 <code>.jsx</code> 为文件后缀名。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// CommentBox.js(x)</span><br><span class="line">var CommentBox = React.createClass(&#123;</span><br><span class="line">  render: function() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;div className=&quot;commentBox&quot;&gt;</span><br><span class="line">        Hello, world! I am a CommentBox.</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">ReactDOM.render(</span><br><span class="line">  &lt;CommentBox /&gt;,</span><br><span class="line">  document.getElementById(&apos;content&apos;)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><p>一个 component 的执行需要经过几个过程，你可以清晰的知道 component 在整个过程中是如何执行的。比如：</p>
+<ul>
+<li><code>componentWillMount</code></li>
+<li><code>componentDidMount</code></li>
+<li><code>componentWillReceiveProps</code></li>
+<li><code>shouldComponentUpdate</code></li>
+<li><code>componentWillUpdate</code></li>
+<li><code>componentDidUpdate</code></li>
+<li><code>componentWillUnmount</code></li>
+</ul>
+<h2 id="state"><a href="#state" class="headerlink" title="state"></a>state</h2><ul>
+<li>用来维持 component 内部状态，由<code>getInitialState</code> 方法初始化，如<code>this.state.isHide</code> <code>this.state.disabled</code> 等。</li>
+<li>当检测到 <code>state</code> 变化时，会重新执行 <code>render</code> 方法。</li>
+</ul>
+<h2 id="props"><a href="#props" class="headerlink" title="props"></a>props</h2><ul>
+<li>也是用来维护组件内部状态，由父级组件传入，如 <code>&lt;CommentBox userName={&#39;zhangsan&#39;} /&gt;</code> 用 <code>this.props.userName</code> 取到。</li>
+<li><code>props</code> 请使用驼峰命名法如: <code>userName</code> 而不是 <code>user_name</code> 或者 <code>username</code>。</li>
+<li>当检测到 <code>props</code> 变化时, 会重新执行 <code>render</code> 和 <code>componentWillReciveProps</code> 方法。</li>
+</ul>
+<h1 id="组件方法"><a href="#组件方法" class="headerlink" title="组件方法"></a>组件方法</h1><h2 id="render-Function"><a href="#render-Function" class="headerlink" title="render [Function]"></a>render [Function]</h2><ul>
+<li><code>render</code> 方法是每个 component 所必须的。</li>
+<li><code>render</code> 返回值只能是 JSX、<code>null</code> 或者 <code>false</code>。</li>
+<li><code>render</code> 是纯粹的，不能够在 render 里面修改 <code>state</code> 或者读写 DOM 信息，也不能与浏览器交互，如调用 <code>setTiemout</code> 等。</li>
+<li>当组件检测到 <code>state</code> 或 <code>props</code> 改变时，<code>render</code> 会重新被调用。</li>
+</ul>
+<h2 id="getInitialState-Function"><a href="#getInitialState-Function" class="headerlink" title="getInitialState [Function]"></a>getInitialState [Function]</h2><ul>
+<li>在 component 挂载之前调用一次，返回值将作为 <code>this.state.xxx</code> 的初始值。</li>
+<li><p>如果使用 ES6 (注: 以下例子中都会使用ES6 来编写) 来创建组件，请在 <code>constructor</code> 中指定，如:</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">import React, &#123; PropTypes &#125; from &apos;react&apos;;</span><br><span class="line"></span><br><span class="line">export default class PersonBox extends React.Component &#123;</span><br><span class="line">  // 定义需要的props校验</span><br><span class="line">  static propsTypes = &#123;</span><br><span class="line">    userName: PropTypes.string.isRequired,</span><br><span class="line">  &#125;;</span><br><span class="line">  // 调用父类构造器进行初始化</span><br><span class="line">  constructor(props) &#123;</span><br><span class="line">    super(props);</span><br><span class="line">    // getInitialState</span><br><span class="line">    this.state = &#123; count: 0 &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  // 定义jsx渲染</span><br><span class="line">  render() &#123;</span><br><span class="line">    const &#123; userName &#125; = this.props;</span><br><span class="line">    return (</span><br><span class="line">      &lt;div className=&quot;comment-box&quot;&gt;</span><br><span class="line">        Hello, world! I am &#123;userName&#125;.</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="getDefaultProps-Function"><a href="#getDefaultProps-Function" class="headerlink" title="getDefaultProps [Function]"></a>getDefaultProps [Function]</h2><ul>
+<li>在 component 创建的时候调用一次，如果父组件没有指定 props 中的某个键，则此返回的对象中的相应属性将会合并到 <code>this.props</code> 中。</li>
+<li><p>如:</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">import React, &#123; PropTypes &#125; from &apos;react&apos;;</span><br><span class="line"></span><br><span class="line">export default class PersonBox extends React.Component &#123;</span><br><span class="line"></span><br><span class="line">  static propsTypes = &#123;</span><br><span class="line">    userName: PropTypes.string.isRequired,</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  getDefaultProps() &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      userName: &apos;张三&apos;,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    // userName is 张三</span><br><span class="line">    const &#123; userName &#125; = this.props;</span><br><span class="line">    return (</span><br><span class="line">      &lt;div className=&quot;comment-box&quot;&gt;</span><br><span class="line">        Hello, world! I am &#123;userName&#125;.</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="propTypes-Object"><a href="#propTypes-Object" class="headerlink" title="propTypes [Object]"></a>propTypes [Object]</h2><ul>
+<li><p><code>propTypes</code> 用来验证传入到组件的 props。如果父级组件传入的 <code>props</code> 不合法，将会提示 <code>warning</code> 或者无法工作，如:</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import React, &#123; PropTypes &#125; from &apos;react&apos;;</span><br><span class="line">import PersonBox from &apos;PersonBox&apos;;</span><br><span class="line"></span><br><span class="line">export default class PersonList extends React.Component &#123;</span><br><span class="line"></span><br><span class="line">  // 上例 PersonBox 组件，userName 期待一个 string 却输入 number</span><br><span class="line">  // 将提示 `warning`</span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;PersonBox userName=&#123;12345&#125; /&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="statics-Object"><a href="#statics-Object" class="headerlink" title="statics [Object]"></a>statics [Object]</h2><ul>
+<li><code>statics</code> 对象允许你定义静态的方法，这些静态的方法可以在组件类上调用。</li>
+<li><p><code>statics</code> 对象不能调用 <code>state</code> 和 <code>props</code>，如果你真的想调用的话，可以通过参入传入，例如:</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">var PersonBox = React.createClass(&#123;</span><br><span class="line">  statics: &#123;</span><br><span class="line">    customMethod: function(foo) &#123;</span><br><span class="line">      return foo === &apos;bar&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  render: function() &#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">PersonBox.customMethod(&apos;bar&apos;);  // true</span><br><span class="line"></span><br><span class="line">// ES6 写法</span><br><span class="line">class PersonBox extends React.Component &#123;</span><br><span class="line">  constructor(props) &#123;</span><br><span class="line">    this.state = &#123;</span><br><span class="line">      welcome: &apos;Hello!&apos;,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  static customMethod(state) &#123;</span><br><span class="line">    // undefined</span><br><span class="line">    console.info(this.state);</span><br><span class="line">    // &#123; welcome: &apos;Hello!&apos; &#125;</span><br><span class="line">    console.info(state);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  otherNotStaticMethod() &#123;</span><br><span class="line">    // &#123; welcome: &apos;Hello!&apos; &#125;</span><br><span class="line">    console.info(this.state);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="displayName-String"><a href="#displayName-String" class="headerlink" title="displayName [String]"></a>displayName [String]</h2><ul>
+<li>字符串用于输出调试信息。</li>
+<li><p>不推荐使用 <code>displayName</code> 来调用 component，而是使用组件名称引用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// bad</span><br><span class="line">export default React.createClass(&#123;</span><br><span class="line">  displayName: &apos;PersonBox&apos;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">// good</span><br><span class="line">export default class PersonBox extends React.Component &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="组件生命周期"><a href="#组件生命周期" class="headerlink" title="组件生命周期"></a>组件生命周期</h1><h2 id="componentWillMount-Function"><a href="#componentWillMount-Function" class="headerlink" title="componentWillMount  [Function]"></a>componentWillMount  [Function]</h2><ul>
+<li>组件加载的整个过程中只调用一次，在初始化渲染执行之前立刻调用。</li>
+<li>如果在这个方法内使用了 <code>setState</code>, 那么 <code>render</code> 方法将会重新执行一次。</li>
+</ul>
+<h2 id="componentDidMount-Function"><a href="#componentDidMount-Function" class="headerlink" title="componentDidMount  [Function]"></a>componentDidMount  [Function]</h2><ul>
+<li>在初始化渲染执行之后立刻调用一次， 只执行一次。</li>
+<li>你可以使用 <code>ReactDOM.getDOMNode()</code> 来获取 DOM 元素。</li>
+<li>如果你使用了如 <code>jquery</code> 等三方库，请在 <code>componentDidMount</code> 后执行。</li>
+<li>你可以在该方法内执行 <code>setState</code> 操作。</li>
+</ul>
+<h2 id="componentWillReceiveProps-nextProps-Function"><a href="#componentWillReceiveProps-nextProps-Function" class="headerlink" title="componentWillReceiveProps(nextProps) [Function]"></a>componentWillReceiveProps(nextProps) [Function]</h2><ul>
+<li>在组件接收到新的 <code>props</code> 的时候调用。在初始化渲染的时候，该方法不会调用。</li>
+<li><p>在该函数中调用 <code>setState</code> 将不会引起第二次渲染。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">componentWillReceiveProps(nextProps) &#123;</span><br><span class="line">  // 组件接收到的新的 props</span><br><span class="line">  console.info(nextProps !== this.props);</span><br><span class="line">  this.setState(&#123;</span><br><span class="line">    // cannot work!</span><br><span class="line">    nextState: &apos;new State&apos;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>该属性配合 <a href="https://github.com/reactjs/redux" target="_blank" rel="noopener">redux</a> 使用时非常有用，因为当 <code>redux</code> 触发新的 <code>action</code> 时, 组件会接收到 <code>nextProps</code>。</p>
+</li>
+</ul>
+<h2 id="shouldComponentUpdate-nextProps-nextState-function"><a href="#shouldComponentUpdate-nextProps-nextState-function" class="headerlink" title="shouldComponentUpdate(nextProps, nextState) [function]"></a>shouldComponentUpdate(nextProps, nextState) [function]</h2><p>  常用在接口请求处于 pending 时页面可以显示 loading 字样，避免页面反复 render，返回 <code>false</code> 则 <code>render</code> 方法不会被重新调用，实际应用中较少使用，因为 React 全局渲染是高效的。</p>
+<h2 id="componentWillUpdate-nextProps-nextState-Function"><a href="#componentWillUpdate-nextProps-nextState-Function" class="headerlink" title="componentWillUpdate(nextProps, nextState) [Function]"></a>componentWillUpdate(nextProps, nextState) [Function]</h2><ul>
+<li>不常用，接收到新的 props 或者 state 之前立刻调用。</li>
+<li>不能在该方法中使用 <code>setState</code>，如果需要更新<code>state</code>来响应某个<code>prop</code>的改变，请使用 <code>componentWillReceiveProps</code>。</li>
+</ul>
+<h2 id="componentDidUpdate-prevProps-prevState-Function"><a href="#componentDidUpdate-prevProps-prevState-Function" class="headerlink" title="componentDidUpdate(prevProps, prevState)  [Function]"></a>componentDidUpdate(prevProps, prevState)  [Function]</h2><p>不常用，在组件的更新已经同步到 DOM 中之后立刻被调用。</p>
+<h2 id="componentWillUnmount-Function"><a href="#componentWillUnmount-Function" class="headerlink" title="componentWillUnmount [Function]"></a>componentWillUnmount [Function]</h2><ul>
+<li>在组件从 DOM 中移除的时候立刻被调用。</li>
+<li>常用来执行页面切换后的后续操作，如页面切换后想 <code>clearInterval</code> 掉当前页面的定时器。</li>
+</ul>
+<h1 id="尾声"><a href="#尾声" class="headerlink" title="尾声"></a>尾声</h1><p>  以上就是 React 组件属性的概览说明了，想要了解更多请查看<a href="https://facebook.github.io/react/" target="_blank" rel="noopener">React官方文档</a>。并且虽然 React 构建 UI 非常出色，但是还是需要手工管理其 <code>state</code> 和 <code>props</code>。</p>
+<p>  在实际运用中经常会跟 flux 模型结合使用，来自动化管理状态，推荐使用 <code>redux</code> 来配合使用，在后续的章节会陆续讲到。</p>
+<p>  如果你决定使用 React 来构建你的应用的话，你还会涉及到一些名词如 <code>babel</code> <code>webpack</code> 等，我们提供了一个<a href="https://github.com/BurnishTechCN/react" target="_blank" rel="noopener">React 脚手架</a>，来快速构建一个高效的 react 项目，希望可以帮到你。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/09/react-1/" data-id="cjszk51yg000jsbq56u3762du" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/08/10/redux-1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Redux - rest middleware
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/07/26/build-private-npm-repository-server/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">npm 私有仓库搭建</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/FrontEnd/">FrontEnd</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/VPN/">VPN</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tunnelblick/">Tunnelblick</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css3/">css3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tinyMCE/">tinyMCE</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/React/" style="font-size: 10px;">React</a> <a href="/tags/Redux/" style="font-size: 10px;">Redux</a> <a href="/tags/Tunnelblick/" style="font-size: 10px;">Tunnelblick</a> <a href="/tags/css3/" style="font-size: 10px;">css3</a> <a href="/tags/tinyMCE/" style="font-size: 10px;">tinyMCE</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/05/10/vpn/">React - 组件属性和生命周期的理解</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/12/tinyMCE-1/">TinyMCE - 在 tinyMCE 中使用七牛上传</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/10/redux-1/">Redux - rest middleware</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/09/react-1/">React - 组件属性和生命周期的理解</a>
+          </li>
+        
+          <li>
+            <a href="/2016/07/26/build-private-npm-repository-server/">npm 私有仓库搭建</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
